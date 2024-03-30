@@ -1,0 +1,219 @@
+@RestController(value = "/simple')
+@Slf4j
+public class Controller{
+
+	@GetMapping(value = "/message")
+	public ResponseEntity<String> getMessage(){
+		log.info("log for getting message");
+		return ResponseEntity<>("Hello World", HttpStatus.OK);
+	}
+}
+==================================================================================================================
+-->Java 8 features:
+1) forEach() method in Iterable interface.
+2) Default and Static method in interfaces.
+3) Functional Interface and Lambda expressions.
+4) Java Stream API for bulk data operations on collections.
+5) Java Time API.
+6) Collection API improvements.
+7) Concurrency API improvements.
+8) Java IO improvements.
+
+==================================================================================================================
+-->Iterating over Lists and Maps:
+Map<Integer,String> hmap = new HashMap<Integer,String>();
+for(Map.Entry<Integer,String> entry : hmap.entrySet()){
+	System.Out.println(entry.getKey()+" "+entry.getValue());
+}
+
+List<Integer> list = new ArrayList<>();
+Iterator it = list.iterator();
+while(it.hasNext()){
+	System.Out.println(it.next());
+}
+==================================================================================================================
+-->Thread States:
+New, Runnable, Running, Waiting, Dead.
+==================================================================================================================
+-->What are immutable class in java and how to create it:
+In Java, an immutable class is a class whose instances cannot be modified after they are created. This means that once an object of an immutable class is created, its state cannot be changed. Immutable classes are often preferred for representing values that should not change over time, such as data transfer objects (DTOs), configuration settings, or value objects.
+
+To create an immutable class in Java, you typically follow these guidelines:
+
+Make the class final to prevent subclassing, as immutability can be compromised by subclassing and overriding methods.
+
+Declare all fields private and final to ensure that they cannot be modified once the object is constructed.
+
+Provide no setter methods for the fields. Instead, initialize the fields either through the constructor or through factory methods.
+
+Avoid returning mutable objects or references to mutable objects from getter methods. If necessary, return copies of the objects or immutable views.
+
+Ensure that any mutable components within the class (if present) are defensively copied during construction or modification to prevent external modification.
+
+Here's an example of an immutable class in Java:
+public final class ImmutablePerson {
+    private final String name;
+    private final int age;
+
+    public ImmutablePerson(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+}
+==================================================================================================================
+-->What is singleton class and how to create it:
+In Java, a singleton class is a class that restricts the instantiation of itself to one object. It ensures that only one instance of the class is created and provides a global point of access to that instance.
+
+Singleton classes are commonly used in scenarios where you need to control access to shared resources, manage global settings or configurations, or implement caching mechanisms.
+
+To create a singleton class in Java, you typically follow these steps:
+
+Make the constructor private to prevent instantiation of the class from outside.
+Provide a static method that serves as a global access point to the singleton instance.
+Create a static member variable to hold the single instance of the class.
+Lazily initialize the instance (i.e., create it when the first request for the instance is made).
+
+Here's an example of a singleton class in Java:
+public class Singleton {
+    // Static member variable to hold the single instance of the class
+    private static Singleton instance;
+
+    // Private constructor to prevent instantiation from outside
+    private Singleton() {
+        // Initialization code, if any
+    }
+
+    // Static method to provide a global access point to the singleton instance
+    public static Singleton getInstance() {
+        // Lazily initialize the instance if it hasn't been created yet
+        if (instance == null) {
+            instance = new Singleton();
+        }
+        return instance;
+    }
+
+    // Other methods and fields, if any
+}
+==================================================================================================================
+-->Transient variable:
+In Java, the transient keyword is used to indicate that a variable should not be serialized when the object containing it is serialized. Serialization is the process of converting an object into a byte stream so that it can be stored in a file, transmitted over a network, or persisted in a database. When an object is serialized, all of its non-transient fields are also serialized by default.
+==================================================================================================================
+-->@Embeddable and @Embedded annotations:
+In Java Persistence API (JPA), the @Embeddable and @Embedded annotations are used to define and map embeddable classes and their instances within entity classes. 
+
+The @Embeddable annotation is used to designate a class as embeddable. An embeddable class is a class whose instances can be embedded within other entities. It's essentially a way to define a reusable component that can be included as a part of one or more entities.
+
+The @Embedded annotation is used to specify that an attribute within an entity class should be treated as embedded. It's used to map the embeddable class type to a column or group of columns within the entity table.
+==================================================================================================================
+-->SQL Joins and indexing:
+->To get the products from the product table which have a category ID mentioned in the category table, you can use a SQL query with a join between the product and category tables. Here's the query:
+		SELECT p.*
+		FROM product p
+		JOIN category c ON p.categoryid = c.categoryid;
+
+->To find the employee with the third highest salary in the employee table, you can use a subquery to first get the third highest salary, and then retrieve the corresponding employee information. Here's the SQL query:
+		SELECT *
+		FROM employee
+		WHERE salary = (
+			SELECT DISTINCT salary
+			FROM employee
+			ORDER BY salary DESC
+			LIMIT 2, 1
+		);
+
+-> In SQL, indexing is a technique used to improve the performance of database queries by allowing the database management system (DBMS) to locate data quickly without having to scan the entire table. Indexes are data structures that store a sorted list of values from one or more columns of a table. When you create an index on a column (or multiple columns), the database creates a separate structure that contains pointers to the actual rows in the table, organized in a way that makes it faster to search for specific values.
+
+Here are some key points about indexing in SQL:
+
+1. **Faster Data Retrieval**: Indexes make data retrieval faster by allowing the database engine to quickly locate rows that satisfy the conditions specified in a query's WHERE clause. Instead of scanning the entire table, the database engine can use the index to directly locate the rows that match the search criteria.
+
+2. **Improved Query Performance**: Queries that involve indexed columns typically perform better than those that do not. This is especially true for large tables where scanning the entire table would be inefficient.
+
+3. **Types of Indexes**: There are different types of indexes supported by most relational database systems, including:
+   - **Single-Column Indexes**: Indexes created on a single column.
+   - **Composite Indexes**: Indexes created on multiple columns.
+   - **Unique Indexes**: Indexes that enforce uniqueness on the indexed column(s).
+   - **Clustered and Non-Clustered Indexes**: Depending on the database system, indexes may be organized in different ways internally, such as clustered or non-clustered.
+
+4. **Maintenance Overhead**: While indexes improve read performance, they can introduce overhead during data modification operations (e.g., INSERT, UPDATE, DELETE). When data is modified, indexes may need to be updated to reflect the changes, which can impact the overall performance of data manipulation operations.
+
+5. **Index Selection**: Choosing the right columns to index is crucial for optimizing query performance. Indexes should be created based on the columns frequently used in search conditions and join conditions.
+
+6. **Index Usage**: The database engine decides whether to use an index based on factors such as query complexity, data distribution, and index statistics. Even if an index is present, it may not always be used by the query optimizer if it determines that a full table scan is more efficient.
+
+In summary, indexing is a critical aspect of database optimization, allowing for faster data retrieval and improved query performance, but it requires careful consideration and management to ensure optimal results.
+
+
+==================================================================================================================
+--->Commonly used microservice patterns:
+Microservices architecture offers various patterns to address different challenges. Some commonly used microservice patterns include:
+
+1. **Service Registry and Discovery**: Microservices are often dynamic and can be deployed and scaled independently. In this pattern, services register themselves with a service registry (e.g., Eureka, Consul), and clients can discover available services from the registry dynamically. This allows for flexible and resilient communication between microservices.
+
+2. **API Gateway**: An API Gateway is a centralized entry point for clients to access microservices. It handles routing, authentication, rate limiting, and other cross-cutting concerns, reducing the complexity for clients. This pattern promotes decoupling between clients and individual microservices.
+
+3. **Circuit Breaker**: The Circuit Breaker pattern helps in preventing cascading failures in distributed systems. It monitors for failures and opens the circuit when the failure rate exceeds a threshold. This prevents further calls to the failing service and provides fallback mechanisms to handle degraded service.
+
+4. **Event-Driven Architecture**: Microservices often communicate asynchronously using events. In this pattern, services produce events when certain actions occur, and other services subscribe to these events and react accordingly. Event-driven architecture promotes loose coupling and scalability.
+
+5. **Saga Pattern**: The Saga pattern manages distributed transactions across multiple microservices. Instead of using traditional ACID transactions, which can be challenging in distributed systems, Sagas break down transactions into a series of smaller, compensating actions. This pattern ensures eventual consistency while maintaining system reliability.
+
+6. **Bulkhead Pattern**: The Bulkhead pattern isolates failures and prevents them from affecting other parts of the system. It involves partitioning resources such as threads, connections, or processes for different components, ensuring that failures in one component do not impact others.
+
+7. **Backend for Frontend (BFF)**: In this pattern, each client (e.g., web, mobile) has its own backend microservice tailored to its specific requirements. This allows for better separation of concerns and optimization of client-specific functionality.
+
+8. **Database per Service**: Each microservice has its own database, and services communicate with each other asynchronously through APIs. This pattern promotes autonomy and scalability but also introduces challenges related to data consistency and transaction management.
+
+9. **Shared Data Pattern**: Some data may need to be shared across multiple microservices. In this pattern, a separate service manages shared data, providing APIs for accessing and updating the data. This helps in maintaining data consistency and avoiding data duplication.
+
+10. **Polyglot Persistence**: Microservices may use different types of databases based on their specific requirements. Polyglot Persistence allows each microservice to choose the most suitable database technology, such as relational, NoSQL, or in-memory databases.
+
+These are just a few examples of commonly used microservice patterns. The choice of patterns depends on factors such as the specific requirements of the system, scalability needs, and organizational preferences.
+
+==================================================================================================================
+-->Load balancing and scaling in microservices:
+Load balancing and scaling are essential concepts in microservices architecture to ensure high availability, reliability, and performance of the system. Let's delve into each:
+
+1. **Load Balancing**:
+   
+   Load balancing refers to the distribution of incoming network traffic across multiple backend services or servers to ensure efficient utilization of resources, prevent overload, and improve reliability. In the context of microservices, load balancing typically occurs at the entry point of the system, such as through an API gateway or a dedicated load balancer.
+
+   Here's how load balancing works in microservices:
+
+   - **Incoming Request**: When a client sends a request, it is received by the load balancer.
+   
+   - **Distribution**: The load balancer evaluates various factors such as current server load, latency, and health checks of backend services.
+   
+   - **Routing**: Based on the evaluation, the load balancer forwards the request to one of the available backend services. This can be done using different algorithms such as round-robin, least connections, or weighted distribution.
+   
+   - **Response Aggregation**: In some cases, the load balancer may aggregate and consolidate responses from multiple backend services before sending them back to the client.
+   
+   - **Health Monitoring**: Load balancers continuously monitor the health of backend services and adjust routing accordingly. If a service becomes unhealthy or unresponsive, the load balancer routes traffic away from it until it recovers.
+
+   Load balancing ensures that no single service or server becomes overwhelmed with requests, improves fault tolerance, and enhances overall system performance.
+
+2. **Scaling**:
+   
+   Scaling involves adjusting the capacity of the system to handle varying levels of workload efficiently. Microservices architecture enables scaling at different levels, including:
+
+   - **Horizontal Scaling (Scaling Out)**: Horizontal scaling involves adding more instances (containers or virtual machines) of a microservice to distribute the workload across multiple nodes. This approach allows the system to handle increased traffic by spreading it across a larger number of instances. Container orchestration platforms like Kubernetes or cloud services like AWS ECS provide automated scaling capabilities based on metrics like CPU utilization or request rates.
+
+   - **Vertical Scaling (Scaling Up)**: Vertical scaling involves increasing the resources (CPU, memory, storage) of individual instances of a microservice to handle increased workload. While vertical scaling can be effective for certain workloads, it may have limits in terms of scalability and can lead to higher costs compared to horizontal scaling.
+
+   - **Auto-scaling**: Auto-scaling mechanisms automatically adjust the number of instances or resources based on predefined criteria such as CPU usage, memory utilization, or incoming request rates. This ensures that the system dynamically scales up or down in response to changes in demand, optimizing resource utilization and cost efficiency.
+
+   - **Stateless Services**: Stateless microservices are easier to scale horizontally because they don't maintain any session state or local data. Each request can be handled independently by any available instance, enabling seamless scaling without impacting data consistency or reliability.
+
+   Scaling in microservices architecture allows the system to handle both predictable and unpredictable spikes in traffic, ensuring high availability and performance while optimizing resource utilization and cost-effectiveness.
+   
+==================================================================================================================
+Find the maximum sum of a contiguous sub array in a given array solution in java 8 using Lists
+Find the minimum number of platforms required solution in java 8 using lists
